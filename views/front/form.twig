@@ -1,0 +1,94 @@
+{% extends 'layouts/master.twig' %}
+{% block body %}
+
+<form action="/create" method="post" >
+	<div class="input_fields_wrap">
+		<label for="fader">A</label>
+		<input type="range" name="param1" min="0" max="100" value="50" id="fader" 
+		step="1" oninput="outputUpdate1(value)">
+		<output for="fader" id="valeur1">50</output>
+		<label for="fader">B</label>
+		<input type="range" name="param2" min="0" max="100" value="50" id="fader" 
+		step="1" oninput="outputUpdate2(value)">
+		<output for="fader" id="valeur2">50</output>
+		<label for="fader">C</label>
+		<input type="range"  name="param3" min="0" max="100" value="50" id="fader" 
+		step="1" oninput="outputUpdate3(value)">
+		<output for="fader" id="valeur3">50</output>
+		<label for="fader">D</label>
+		<input type="range" name="param4" min="0" max="100" value="50" id="fader" 
+		step="1" oninput="outputUpdate4(value)">
+		<output for="fader" id="valeur4">50</output>
+		<label for="fader">E</label>
+		<input type="range" name="param5" min="0" max="100" value="50" id="fader"
+		step="1" oninput="outputUpdate5(value)">
+		<output for="fader" id="valeur5">50</output>
+	</div>
+	<br>
+	<div><input type="text" id="newinput" name="mytext[]"></div>
+	<a id="add">Add a Stat</a>
+	<br>
+	<br>
+	<input type="submit" value="Aperçu">
+</form>
+
+
+<script>
+	let functions = [];
+
+	for(let i=1; i<10; i++){
+		functions[i] = function(val){
+			document.querySelector('#valeur' + i).value = val;
+		}
+	}
+	function outputUpdate1(val){
+		document.querySelector('#valeur1').value = val;
+	}
+	function outputUpdate2(val){
+		document.querySelector('#valeur2').value = val;
+	}
+	function outputUpdate3(val){
+		document.querySelector('#valeur3').value = val;
+	}
+	function outputUpdate4(val){
+		document.querySelector('#valeur4').value = val;
+	}
+	function outputUpdate5(val){
+		document.querySelector('#valeur5').value = val;
+	}
+</script>
+{% endblock body%}
+
+{% block script %}
+
+{{ parent() }}
+<script>
+
+	(function($){
+
+		let max_fields      = 5;
+		let wrapper         = $(".input_fields_wrap");
+		let addButton = $('#add');
+		let fieldHTML =  {row :function(f){
+			return '<div><label for="fader">'+ $('#newinput').val() +'</label><input type="range" name="param'+f+'" min="0" max="100" value="50" id="fader" step="1" oninput="functions['+f+'](value)"><output for="fader" id="valeur'+f+'">50</output><a href="#" class="remove_field">Remove</a></div>';
+		}};
+
+		let x = 1;
+		$(addButton).on('click', function(e){
+			e.preventDefault();
+			if(x < max_fields){
+				x++;
+				$(wrapper).append(fieldHTML.row(x+4));
+			}
+			$(wrapper).on("click",".remove_field", function(e){
+				e.preventDefault(); $(this).parent('div').remove(); x--;
+
+			})
+
+			console.log(e);
+		});
+
+	})(jQuery);
+</script>
+
+{% endblock script%}
